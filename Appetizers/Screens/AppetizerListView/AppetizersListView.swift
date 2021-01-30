@@ -9,18 +9,38 @@ import SwiftUI
 
 struct AppetizersListView: View {
     
+    @EnvironmentObject var order: Order
     @StateObject var viewModel = AppetizersListViewModel()
     
     var body: some View {
-        NavigationView {
-            List(viewModel.appetizers) { appetizer in
-                AppetizerListCell(appetizer: appetizer)
+        ZStack {
+            NavigationView {
+                List(viewModel.appetizers) { appetizer in
+                    AppetizerListCell(appetizer: appetizer)
+                        .onTapGesture {
+                            viewModel.showDetailView(appetizer)
+                        }
+                        .contextMenu(menuItems: {
+                            Button { order.add(appetizer) } label: { Text("Add to order") }
+                            Button { viewModel.showDetailView(appetizer) } label: { Text("View details") }
+                        })
+                }
+                .navigationTitle("🍕Appetizers")
+                .disabled(viewModel.isShowingDetailView)
             }
-            .navigationTitle("🍕Appetizers")
+            .onAppear { viewModel.getAppetizers() }
+            .blur(radius: viewModel.isShowingDetailView ? 20 : 0)
+            
+            if viewModel.isShowingDetailView {
+                AppetizerDetailView(appetizer: viewModel.selectedAppetizer!, isShowing: $viewModel.isShowingDetailView)
+            }
+            
+            if viewModel.isLoading {
+                LoadingView()
+            }
+            
         }
-        .onAppear {
-            viewModel.getAppetizers()
-        }
+        
         .alert(item: $viewModel.alertItem) { alertItem in
             Alert(title: alertItem.title, message: alertItem.message, dismissButton: alertItem.dismissButton)
         }

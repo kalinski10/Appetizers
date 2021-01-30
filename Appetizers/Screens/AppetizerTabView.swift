@@ -25,14 +25,14 @@ struct AppetizerTabView: View {
                     Text("Account")
                 }
             
-            Order()
+            OrderView()
                 .tabItem {
                     Image(systemName: "bag")
                     Text("Orders")
                 }
             
         }
-        .accentColor(Color("brandPrimary"))
+        .accentColor(.brandPrimary)
     }
     
 }
