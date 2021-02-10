@@ -211,8 +211,8 @@
 		4CE7C4D625B87DCE005309CE /* Order */ = {
 			isa = PBXGroup;
 			children = (
-				4CA3263725ACC9560083FB0F /* OrderView.swift */,
 				4C6FD05625C5B191009BFA9C /* OrderViewModel.swift */,
+				4CA3263725ACC9560083FB0F /* OrderView.swift */,
 			);
 			path = Order;
 			sourceTree = "<group>";

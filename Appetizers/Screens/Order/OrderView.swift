@@ -12,13 +12,15 @@ struct OrderView: View {
     @EnvironmentObject var order: Order
     @StateObject var viewModel = OrderViewModel()
     
+    @Namespace var namespace
+    
     var body: some View {
         NavigationView {
             ZStack {
                 VStack {
                     List {
                         ForEach(order.items) { appetizer in
-                            AppetizerListCell(appetizer: appetizer)
+//                            AppetizerListCell(appetizer: appetizer, namespace: namespace)
                         }
                         .onDelete(perform: order.deleteItems)
                     }

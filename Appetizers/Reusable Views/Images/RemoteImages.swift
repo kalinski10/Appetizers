@@ -34,7 +34,7 @@ struct RemoteImage: View { // acts as a secondary component this is essentially 
 
 struct AppetizerRemoteImage: View { // sets the images as nil initially and if we have an image it downloads it and sets it
     
-    @ObservedObject var imageLoader = ImageLoader()
+    @StateObject var imageLoader = ImageLoader()
     
     var urlString: String
     

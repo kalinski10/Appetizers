@@ -12,14 +12,16 @@ struct AppetizerDetailView: View {
     @EnvironmentObject var order: Order
     
     let appetizer: Appetizer
+    let namespace: Namespace.ID
+    
     @Binding var isShowing: Bool
     
     var body: some View {
         VStack {
             AppetizerRemoteImage(urlString: appetizer.imageURL)
+                .matchedGeometryEffect(id: appetizer.id, in: namespace)
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 300, height: 225)
-            
             
             VStack {
                 Text(appetizer.name)
@@ -33,11 +35,11 @@ struct AppetizerDetailView: View {
                     .padding()
                 
                 HStack (spacing: 40){
-                    SubItemView(title: "Calories", value: appetizer.calories)
+                    SubItemView(title: "Calories", value: "\(appetizer.calories) kcal")
                     
-                    SubItemView(title: "Carbs", value: appetizer.carbs)
+                    SubItemView(title: "Carbs", value: "\(appetizer.carbs) g")
                     
-                    SubItemView(title: "Protein", value: appetizer.protein)
+                    SubItemView(title: "Protein", value: "\(appetizer.protein) g")
                 }
             }
             
@@ -45,7 +47,7 @@ struct AppetizerDetailView: View {
             
             Button {
                 order.add(appetizer)
-                isShowing = false
+                withAnimation { isShowing = false }
             } label: {
                 APButton(title: "$\(String(format: "%.2f", appetizer.price)) - Add to order")
             }
@@ -55,33 +57,33 @@ struct AppetizerDetailView: View {
         .cornerRadius(12)
         .shadow(radius: 40)
         .overlay(Button {
-            isShowing = false
-        } label: {
-            DismissButton()
-        },
-        alignment: .topTrailing)
-        .transition(.slide)
+                    withAnimation { isShowing = false } }
+                    label: { DismissButton() },
+                 alignment: .topTrailing)
+        .transition(.asymmetric(insertion: AnyTransition.opacity.animation(Animation.spring().delay(0.3)),
+                                removal: AnyTransition.opacity.animation(.spring())))
     }
 }
 
 
 struct AppetizerDetailView_Previews: PreviewProvider {
+    @Namespace static var namespace
     static var previews: some View {
-        AppetizerDetailView(appetizer: MockData.sampleAppetizer, isShowing: .constant(true))
+        AppetizerDetailView(appetizer: MockData.sampleAppetizer, namespace: namespace, isShowing: .constant(true))
     }
 }
 
 struct SubItemView: View {
     
     var title: String
-    var value: Int
+    var value: String
     
     var body: some View {
         VStack(spacing: 5) {
             Text(title)
                 .font(.caption)
                 .bold()
-            Text("\(value)")
+            Text(value)
                 .foregroundColor(.secondary)
                 .italic()
         }

@@ -12,18 +12,23 @@ struct AppetizersListView: View {
     @EnvironmentObject var order: Order
     @StateObject var viewModel = AppetizersListViewModel()
     
+    @Namespace var namespace
+    
     var body: some View {
         ZStack {
             NavigationView {
                 List(viewModel.appetizers) { appetizer in
-                    AppetizerListCell(appetizer: appetizer)
+                    AppetizerListCell(appetizer: appetizer, namespace: namespace,  isSource: $viewModel.isShowingDetailView)
                         .onTapGesture {
-                            viewModel.showDetailView(appetizer)
+                            withAnimation {
+                                viewModel.selectedAppetizer = appetizer
+                            }
                         }
                         .contextMenu(menuItems: {
                             Button { order.add(appetizer) } label: { Text("Add to order") }
-                            Button { viewModel.showDetailView(appetizer) } label: { Text("View details") }
+                            Button { viewModel.selectedAppetizer = appetizer } label: { Text("View details") }
                         })
+                        
                 }
                 .navigationTitle("🍕Appetizers")
                 .disabled(viewModel.isShowingDetailView)
@@ -32,7 +37,8 @@ struct AppetizersListView: View {
             .blur(radius: viewModel.isShowingDetailView ? 20 : 0)
             
             if viewModel.isShowingDetailView {
-                AppetizerDetailView(appetizer: viewModel.selectedAppetizer!, isShowing: $viewModel.isShowingDetailView)
+                AppetizerDetailView(appetizer: viewModel.selectedAppetizer!,namespace: namespace, isShowing: $viewModel.isShowingDetailView)
+                    .zIndex(1)
             }
             
             if viewModel.isLoading {

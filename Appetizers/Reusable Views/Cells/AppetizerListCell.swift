@@ -10,10 +10,14 @@ import SwiftUI
 struct AppetizerListCell: View {
     
     var appetizer: Appetizer
+    var namespace: Namespace.ID
+    
+    @Binding var isSource: Bool
     
     var body: some View {
         HStack {
             AppetizerRemoteImage(urlString: appetizer.imageURL)
+                .matchedGeometryEffect(id: appetizer.id, in: namespace, isSource: !isSource)
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 120, height: 90)
                 .cornerRadius(8)
@@ -34,7 +38,8 @@ struct AppetizerListCell: View {
 }
 
 struct AppetizerListCell_Previews: PreviewProvider {
+    @Namespace static var namespace
     static var previews: some View {
-        AppetizerListCell(appetizer: MockData.sampleAppetizer)
+        AppetizerListCell(appetizer: MockData.sampleAppetizer, namespace: namespace, isSource: .constant(true))
     }
 }

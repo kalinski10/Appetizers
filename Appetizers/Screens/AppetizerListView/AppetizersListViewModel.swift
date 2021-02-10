@@ -14,7 +14,12 @@ final class AppetizersListViewModel: ObservableObject {
     @Published var alertItem:  AlertItem?
     @Published var isLoading = false
     @Published var isShowingDetailView = false
-    @Published var selectedAppetizer: Appetizer?
+    
+    var selectedAppetizer: Appetizer? {
+        didSet {
+            isShowingDetailView = true
+        }
+    }
     
     func getAppetizers() {
         isLoading = true
@@ -45,14 +50,6 @@ final class AppetizersListViewModel: ObservableObject {
                     }
                 }
             }
-        }
-    }
-    
-    
-    func showDetailView(_ appetizer: Appetizer) {
-        withAnimation {
-            isShowingDetailView = true
-            selectedAppetizer = appetizer
         }
     }
 }
