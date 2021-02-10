@@ -1,1 +1,1 @@
-# Appetizers this is my fidt fully customized swiftUI-app
+# Appetizers: this is my first fully customized swiftUI-app
