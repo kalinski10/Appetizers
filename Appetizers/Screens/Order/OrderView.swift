@@ -20,7 +20,7 @@ struct OrderView: View {
                 VStack {
                     List {
                         ForEach(order.items) { appetizer in
-//                            AppetizerListCell(appetizer: appetizer, namespace: namespace)
+                            AppetizerListCell(appetizer: appetizer, namespace: namespace, isSource: $viewModel.isSource)
                         }
                         .onDelete(perform: order.deleteItems)
                     }

@@ -26,6 +26,7 @@ struct Account: View {
                     
                     DatePicker("Birthday",
                                selection: $viewModel.user.birthday,
+                               in: Date().oneHundredTenYearsAgo...Date().eighteenYearsAgo,
                                displayedComponents: .date)
                         .accentColor(.brandPrimary)
                         .foregroundColor(.brandPrimary)
